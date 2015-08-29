@@ -16,6 +16,7 @@ For orders:  [('apples', 3.0)] best shop is shop2
 """
 
 import shop
+import operator
 
 def shopSmart(orderList, fruitShops):
     """
@@ -23,7 +24,14 @@ def shopSmart(orderList, fruitShops):
         fruitShops: List of FruitShops
     """    
     "*** YOUR CODE HERE ***"
-    return None
+    shopAndPrices = {}
+    
+    for i in range (len(fruitShops)):
+        shopAndPrices[fruitShops[i]] = fruitShops[i].getPriceOfOrder(orderList)
+        
+    sorted_shopAndPrices = sorted(shopAndPrices.items(),key = operator.itemgetter(1))
+    
+    return sorted_shopAndPrices[0][0]
     
 if __name__ == '__main__':
   "This code runs when you invoke the script from the command line"

@@ -25,11 +25,25 @@ def buyLotsOfFruit(orderList):
         orderList: List of (fruit, numPounds) tuples
             
     Returns cost of order
-    """ 
+    """
     totalCost = 0.0             
     "*** YOUR CODE HERE ***"
-    return totalCost
+    singleCost = 0.0;
     
+    for i in range(len(orderList)):
+        if orderList[i][0] == 'apples':
+           singleCost = orderList[i][1] * 2.00;
+        if orderList[i][0] == 'oranges':
+           singleCost = orderList[i][1] * 1.50;
+        if orderList[i][0] == 'pears':
+           singleCost = orderList[i][1] * 1.75;
+        if orderList[i][0] == 'limes':
+           singleCost = orderList[i][1] * 0.75;
+        if orderList[i][0] == 'strawberries':
+           singleCost = orderList[i][1] * 1.00;
+        totalCost = totalCost + singleCost;
+    return totalCost
+   
 # Main Method    
 if __name__ == '__main__':
     "This code runs when you invoke the script from the command line"
