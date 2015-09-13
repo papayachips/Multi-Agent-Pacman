@@ -96,13 +96,7 @@ def depthFirstSearch(problem):
     while True:
 	if not fringes:
 		return 999999
-
-        print fringes
-
 	fringe = fringes.pop()
-
-	print routes
-	print cost
 
 	while cost[0] > fringe[len(fringe) - 1]:
 		routes.pop()
@@ -118,7 +112,6 @@ def depthFirstSearch(problem):
 			successor = tuple(list(successor)+[fringe[len(fringe) - 1] + 1])
 			fringes.append(successor)
     	cost[0] = cost[0] + 1
-	print
     return routes
 
 def breadthFirstSearch(problem):
