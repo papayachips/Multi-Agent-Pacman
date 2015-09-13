@@ -84,20 +84,42 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
+    routes = []
+    closed = [problem.getStartState()]
+    fringes = []
+    cost = [1]
+    fringes.append(tuple(list(problem.getStartState())+[0]))
+    for successor in problem.getSuccessors(problem.getStartState()):
+	fringes.append(tuple(list(successor)+ cost))
+    print fringes
 
-    closed[]
-    fringes = [problem.getStartState(), problem.getStartState().getSuccessors(getStartState())]
-     
-    for fringe in fringe:
-        if fringe.empty() :
-           return 999999
-        state = fringe.pop()
-        if problem.isGoalState(problem, state):
-           return state
-        if state not it closed:
-           closed.append(state)
-        for child in state.successor:
-            fringes.append(child)
+    while True:
+	if not fringes:
+		return 999999
+
+        print fringes
+
+	fringe = fringes.pop()
+
+	print routes
+	print cost
+
+	while cost[0] > fringe[len(fringe) - 1]:
+		routes.pop()
+		cost[0] = cost[0] - 1
+
+	routes.append(fringe[1])
+    	if problem.isGoalState(fringe[0]):
+		break
+
+    	if fringe[0] not in closed:
+		closed.append(fringe[0])
+		for successor in problem.getSuccessors(fringe[0]): 
+			successor = tuple(list(successor)+[fringe[len(fringe) - 1] + 1])
+			fringes.append(successor)
+    	cost[0] = cost[0] + 1
+	print
+    return routes
 
 def breadthFirstSearch(problem):
     """
@@ -105,6 +127,7 @@ def breadthFirstSearch(problem):
     [2nd Edition: p 73, 3rd Edition: p 82]
     """
     "*** YOUR CODE HERE ***"
+    
     util.raiseNotDefined()
 
 def uniformCostSearch(problem):
