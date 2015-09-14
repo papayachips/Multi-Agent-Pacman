@@ -136,8 +136,6 @@ def breadthFirstSearch(problem):
 		return 999999
 
 	fringe = fringes.pop()
-	print fringe
-	print
 	orders.append(fringe)
         
 	if problem.isGoalState(fringe[0]):
