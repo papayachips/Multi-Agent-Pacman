@@ -120,8 +120,50 @@ def breadthFirstSearch(problem):
     [2nd Edition: p 73, 3rd Edition: p 82]
     """
     "*** YOUR CODE HERE ***"
+
+    print problem.getSuccessors(problem.getStartState())
+    routes = []
+    orders = []
+    closed = []
+    fringes = util.Queue()
+
+
+    closed.append(problem.getStartState())
+    fringes.push((problem.getStartState(),(0,0)))
+
+    while True:
+	if not fringes:
+		return 999999
+
+	fringe = fringes.pop()
+	print fringe
+	print
+	orders.append(fringe)
+        
+	if problem.isGoalState(fringe[0]):
+		break
+	
+	for successor in problem.getSuccessors(fringe[0]):
+		if successor not in closed:
+			closed.append(successor)
+			fringes.push(tuple(list(successor)+ [fringe[0]]))
     
-    util.raiseNotDefined()
+    node = orders.pop()
+    routes.append(node[1])
+
+    while True:
+	if node[0] == problem.getStartState():
+		break
+	else:
+		adjNode = orders.pop()
+		if adjNode[0] == node[3]:
+			routes.append(adjNode[1])
+			node = adjNode
+
+    routes.pop()
+    routes.reverse()
+    return routes
+    
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
