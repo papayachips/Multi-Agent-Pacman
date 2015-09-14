@@ -121,7 +121,6 @@ def breadthFirstSearch(problem):
     """
     "*** YOUR CODE HERE ***"
 
-    print problem.getSuccessors(problem.getStartState())
     routes = []
     orders = []
     closed = []
