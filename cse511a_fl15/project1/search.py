@@ -141,10 +141,9 @@ def breadthFirstSearch(problem):
 		break
 	
 	for successor in problem.getSuccessors(fringe[0]):
-		if successor not in closed:
-			closed.append(successor)
+		if successor[0] not in closed:
+			closed.append(successor[0])
 			fringes.push(tuple(list(successor)+ [fringe[0]]))
-    
     node = orders.pop()
     routes.append(node[1])
 
