@@ -91,7 +91,6 @@ def depthFirstSearch(problem):
     fringes.append(tuple(list(problem.getStartState())+[0]))
     for successor in problem.getSuccessors(problem.getStartState()):
 	fringes.append(tuple(list(successor)+ cost))
-    print fringes
 
     while True:
 	if not fringes:
