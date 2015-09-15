@@ -88,7 +88,7 @@ def depthFirstSearch(problem):
     closed = [problem.getStartState()]
     fringes = []
     cost = [1]
-    fringes.append(tuple(list(problem.getStartState())+[0]))
+    fringes.append(tuple([problem.getStartState()]+[0]))
     for successor in problem.getSuccessors(problem.getStartState()):
 	fringes.append(tuple(list(successor)+ cost))
 
@@ -127,7 +127,7 @@ def breadthFirstSearch(problem):
 
 
     closed.append(problem.getStartState())
-    fringes.push((problem.getStartState(),(0,0)))
+    fringes.push(tuple([problem.getStartState()] +[(0,0)]))
 
     while True:
 	if not fringes:
@@ -158,49 +158,38 @@ def breadthFirstSearch(problem):
     routes.pop()
     routes.reverse()
     return routes
-    
 
 def uniformCostSearch(problem):
     "Search the node of least total cost first. "
     "*** YOUR CODE HERE ***"
 
-    routes = []
-    orders = []
-    closed = []
     fringes = util.PriorityQueue()
+    routes = []
+    finished = []
 
-    closed.append(problem.getStartState())
-    fringes.push((problem.getStartState(), (0,0)), 0)
+    for successor in problem.getSuccessors(problem.getStartState()):
+	costAction = [successor[1]]
+        cost = problem.getCostOfActions(costAction)
+        fringes.push([successor[0]] + costAction, cost)
 
     while True:
-	if not fringes:
+	if fringes.isEmpty():
 		return 999999
 
-	fringe = fringes.pop()
-	orders.append(fringe)
-        
-	if problem.isGoalState(fringe[0]):
-		break
-	
-	for successor in problem.getSuccessors(fringe[0]):
-		if successor[0] not in closed:
-			closed.append(successor[0])
-			fringes.push(tuple(list(successor)+ [fringe[0]]), successor[2])
-    	
-	node = orders.pop()
-    	routes.append(node[1])
-
-    while True:
-	if node[0] == problem.getStartState():
-		break
+	node = fringes.pop()
+	if node[0] not in finished:
+		finished.append(node[0])
 	else:
-		adjNode = orders.pop()
-		if adjNode[0] == node[3]:
-			routes.append(adjNode[1])
-			node = adjNode
+		continue
 
-    routes.pop()
-    routes.reverse()
+	if problem.isGoalState(node[0]):
+		routes = node[1:]
+		break;
+	for successor in problem.getSuccessors(node[0]):
+
+		costAction = node[1:] + [successor[1]]
+		cost = problem.getCostOfActions(costAction)
+		fringes.push([successor[0]] + costAction, cost)
     return routes
 
 def nullHeuristic(state, problem=None):
