@@ -186,7 +186,6 @@ def uniformCostSearch(problem):
 		routes = node[1:]
 		break;
 	for successor in problem.getSuccessors(node[0]):
-
 		costAction = node[1:] + [successor[1]]
 		cost = problem.getCostOfActions(costAction)
 		fringes.push([successor[0]] + costAction, cost)
@@ -202,6 +201,28 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     "Search the node that has the lowest combined cost and heuristic first."
     "*** YOUR CODE HERE ***"
+
+    closed = []
+    fringes = util.PriorityQueue()
+    fringes.push(problem.getStartState(), 0)
+    
+    while True:
+	if not fringes:
+		return 999999
+	
+	node = fringes.pop()
+	for successor in problem.getSuccessors():
+
+		fringes.push(tuple(list(successor)+ [fringe[0]]))
+		if problem.isGoalState(successor[0]):
+			break
+		
+		
+		
+
+
+
+
     util.raiseNotDefined()
 
 
