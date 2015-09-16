@@ -216,6 +216,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 		return 999999
 
 	node = fringes.pop()
+
 	if node[0] not in finished:
 		finished.append(node[0])
 	else:
@@ -224,10 +225,12 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 	if problem.isGoalState(node[0]):
 		routes = node[1:]
 		break;
+
 	for successor in problem.getSuccessors(node[0]):
-		costAction = node[1:] + [successor[1]]
-		cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[1], problem))
-		fringes.push([successor[0]] + costAction, cost)
+		if int(nullHeuristic(successor[1], problem)) < int(nullHeuristic(node[1], problem))
+			costAction = node[1:] + [successor[1]]
+			cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[1], problem))
+			fringes.push([successor[0]] + costAction, cost)
     return routes
 
 # Abbreviations
