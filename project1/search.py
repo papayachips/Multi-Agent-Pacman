@@ -205,7 +205,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     fringes = util.PriorityQueue()
     routes = []
     finished = []
-    visited = []
     for successor in problem.getSuccessors(problem.getStartState()):
 	costAction = [successor[1]]
         cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
@@ -228,11 +227,9 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 		break;
 
 	for successor in problem.getSuccessors(node[0]):
-		if successor[0] not in visited:
-			visited.append(successor[0])
-			costAction = node[1:] + [successor[1]]
-			cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
-			fringes.push([successor[0]] + costAction, cost)
+		costAction = node[1:] + [successor[1]]
+		cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
+		fringes.push([successor[0]] + costAction, cost)
     return routes
 
 # Abbreviations
