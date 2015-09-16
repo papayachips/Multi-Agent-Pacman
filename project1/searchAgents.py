@@ -345,7 +345,7 @@ def cornersHeuristic(state, problem):
 
     "*** YOUR CODE HERE ***"
 
-    I
+    
 
     
 
