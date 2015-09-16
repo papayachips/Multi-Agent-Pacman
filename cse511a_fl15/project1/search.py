@@ -208,7 +208,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     for successor in problem.getSuccessors(problem.getStartState()):
 	costAction = [successor[1]]
-        cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[1], problem))
+        cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
         fringes.push([successor[0]] + costAction, cost)
 
     while True:
@@ -227,10 +227,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 		break;
 
 	for successor in problem.getSuccessors(node[0]):
-		if int(nullHeuristic(successor[1], problem)) < int(nullHeuristic(node[1], problem))
-			costAction = node[1:] + [successor[1]]
-			cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[1], problem))
-			fringes.push([successor[0]] + costAction, cost)
+		#if int(nullHeuristic(successor[1], problem)) < int(nullHeuristic(node[0], problem)):
+		costAction = node[1:] + [successor[1]]
+		cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
+		fringes.push([successor[0]] + costAction, cost)
     return routes
 
 # Abbreviations
