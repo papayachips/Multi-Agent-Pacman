@@ -227,7 +227,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 		break;
 
 	for successor in problem.getSuccessors(node[0]):
-		#if int(nullHeuristic(successor[1], problem)) < int(nullHeuristic(node[0], problem)):
 		costAction = node[1:] + [successor[1]]
 		cost = problem.getCostOfActions(costAction) + int(nullHeuristic(successor[0], problem))
 		fringes.push([successor[0]] + costAction, cost)
