@@ -68,12 +68,26 @@ class ReflexAgent(Agent):
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
     "*** YOUR CODE HERE ***"
-    print ("successorGameState: ", successorGameState);
-    print ("newPos: ", newPos);
-    print ("newFood", newFood);
-    print ("newGhostStates: ", newGhostStates);
-    print ("newScaredTimes: ", newScaredTimes);
+    #newFood in an instant, newFood[0]-newFood[4] is list len10, newFood[0][0]is bool
+    #print "newPos: " is a tuple
+    #print "newGhostStates: type list, len 1, list content is object (2.0, 4.0), East " 
+    #print "newFood show where is food in the scope of whole panel"
+    successorGameState = currentGameState.generatePacmanSuccessor(action)
+    ghostPosition =  successorGameState.getGhostPositions()
+
+    score = 0
+    if newFood[newPos[0]][newPos[1]]:
+      score = 15
+    if ghostPosition[0][0] == newPos[0]:
+      if ghostPosition[0][1] == newPos[1]:
+        score = -30
+    return score
+
+
+
+
     return successorGameState.getScore()
+
 
 def scoreEvaluationFunction(currentGameState):
   """
