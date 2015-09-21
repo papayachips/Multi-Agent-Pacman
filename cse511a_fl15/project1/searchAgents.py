@@ -274,18 +274,40 @@ class CornersProblem(search.SearchProblem):
             if not startingGameState.hasFood(*corner):
                 print 'Warning: no food in corner ' + str(corner)
         self._expanded = 0 # Number of search nodes expanded
-
         "*** YOUR CODE HERE ***"
+	
+	self._visitedlist = []
+	self._visitedCorners = []
 
     def getStartState(self):
         "Returns the start state (in your state space, not the full Pacman state space)"
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+	return (self.startingPosition, [])
 
     def isGoalState(self, state):
         "Returns whether this search state is a goal state of the problem"
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+
+	isGoal = False
+
+	
+	if state[0] in self.corners:
+		if state[0] not in self._visitedCorners:
+			self._visitedCorners.append(state[0])
+			if len(self._visitedCorners) == 4:
+				isGoal = True
+	
+
+	#if isGoal:
+            #self._visitedlist.append(state[0])
+            #import __main__
+            #if '_display' in dir(__main__):
+                #if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+                    #__main_._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+			
+	
+	return isGoal
 
     def getSuccessors(self, state):
         """
@@ -300,6 +322,8 @@ class CornersProblem(search.SearchProblem):
         """
 
         successors = []
+
+
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             # Add a successor state to the successor list if the action is legal
             # Here's a code snippet for figuring out whether a new position hits a wall:
@@ -310,8 +334,27 @@ class CornersProblem(search.SearchProblem):
 
             "*** YOUR CODE HERE ***"
 
-        self._expanded += 1
-        return successors
+	    x = state[0][0]
+	    y = state[0][1]
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+    
+	    
+	    nextState = (nextx, nexty)
+	    if not self.walls[nextx][nexty]:
+		if nextState not in self._visitedCorners:
+			if nextState in self.corners:
+				listState = state[1].append(nextState)
+				print stateList
+			successors.append((nextState, listState))
+        	self._expanded += 1
+
+
+
+	if state not in self._visitedlist:
+		self._visitedlist.append(state)
+
+	return successors
 
     def getCostOfActions(self, actions):
         """

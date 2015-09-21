@@ -132,13 +132,13 @@ def breadthFirstSearch(problem):
     while True:
 	if not fringes:
 		return 999999
-
+	
 	fringe = fringes.pop()
 	orders.append(fringe)
         
 	if problem.isGoalState(fringe[0]):
 		break
-	
+
 	for successor in problem.getSuccessors(fringe[0]):
 		if successor[0] not in closed:
 			closed.append(successor[0])
