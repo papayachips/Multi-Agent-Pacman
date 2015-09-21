@@ -72,16 +72,23 @@ class ReflexAgent(Agent):
     #print "newPos: " is a tuple
     #print "newGhostStates: type list, len 1, list content is object (2.0, 4.0), East " 
     #print "newFood show where is food in the scope of whole panel"
+
     successorGameState = currentGameState.generatePacmanSuccessor(action)
     ghostPosition =  successorGameState.getGhostPositions()
 
+    ghostDistance = (ghostPosition[0][0] - newPos[0]) * (ghostPosition[0][0] - newPos[0]) + (ghostPosition[0][1]- newPos[1]) * (ghostPosition[0][1]- newPos[1])
+
     score = 0
-    if newFood[newPos[0]][newPos[1]]:
-      score = 15
-    if ghostPosition[0][0] == newPos[0]:
-      if ghostPosition[0][1] == newPos[1]:
-        score = -30
+    if ghostDistance > 5:
+      if newFood[newPos[0]][newPos[1]]:
+        score = 20
+      else:
+        score = 10
+    else: 
+      score = 5
     return score
+    
+
 
 
 
