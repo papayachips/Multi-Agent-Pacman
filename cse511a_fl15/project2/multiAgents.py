@@ -87,11 +87,6 @@ class ReflexAgent(Agent):
     else: 
       score = 5
     return score
-    
-
-
-
-
 
     return successorGameState.getScore()
 
