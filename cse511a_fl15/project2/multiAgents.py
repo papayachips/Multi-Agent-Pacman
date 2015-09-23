@@ -72,20 +72,27 @@ class ReflexAgent(Agent):
     #print "newPos: " is a tuple
     #print "newGhostStates: type list, len 1, list content is object (2.0, 4.0), East " 
     #print "newFood show where is food in the scope of whole panel"
-
-    successorGameState = currentGameState.generatePacmanSuccessor(action)
+    successorGameStates = currentGameState.generatePacmanSuccessor(action)
+    
+    #for successorGameState in successorGameState
     ghostPosition =  successorGameState.getGhostPositions()
 
     ghostDistance = (ghostPosition[0][0] - newPos[0]) * (ghostPosition[0][0] - newPos[0]) + (ghostPosition[0][1]- newPos[1]) * (ghostPosition[0][1]- newPos[1])
 
     score = 0
-    if ghostDistance > 5:
+    if ghostDistance > 2:
+      score = score+15
       if newFood[newPos[0]][newPos[1]]:
-        score = 20
+        score = score+20
       else:
-        score = 10
+        score = score+10
     else: 
-      score = 5
+      score = score - 5
+      if newFood[newPos[0]][newPos[1]]:
+        score = score + 10
+      else:
+        score = score - 30
+
     return score
 
     return successorGameState.getScore()
@@ -147,7 +154,33 @@ class MinimaxAgent(MultiAgentSearchAgent):
         Returns the total number of agents in the game
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+
+    AgentNumber = gameState.getNumAgents()
+
+    chosen_score = 0;
+    actions = [];
+    agentNo = 1;
+
+    if self.depth == 0:
+      chosen_score = self.evaluationFunction();
+      return tuple(chosen_score, actions)
+
+    else:
+      actions = gameState.getLegalActions(agentNo);
+      if len(actions) == 0:
+        chosen_score = self.evaluationFunction();
+      else:
+        best_score = float("-inf")
+        for action in actions:
+          while agentNo <= AgentNumber:
+            game = gameState.generateSuccessor(agentNo, action)
+            ret = self.getAction(game)
+            if ret[0] > best_score:
+              best_score = ret[0]
+              actions = actions + [action]
+            agentNo = agentNo + 1
+
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
   """
