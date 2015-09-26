@@ -157,49 +157,52 @@ class MinimaxAgent(MultiAgentSearchAgent):
     """
     "*** YOUR CODE HERE ***"
 
+    #return value and action
+    def miniMax(miniMaxState, depth, agent):
+      numAgent = miniMaxState.getNumAgents()
+      newAgent = 0
+      newDepth = 0
+      valueMax = float("-inf")
+      valueMin = float("inf")
+      move = Directions.STOP
 
-    def miniMax(miniMaxState, depth, agent, bestValueMin, bestValueMax,action_global, value):
-      numAgents = miniMaxState.getNumAgents()
+      if depth == self.depth:
+        return self.evaluationFunction(miniMaxState), Directions.STOP
 
-      if depth == self.depth - 1:
-        return self.evaluationFunction(miniMaxState)
+      if agent == numAgent - 1:
+        newAgent = 0
+        newDepth = depth + 1
 
-      if agent == numAgents - 1:
-        agent = 0
-        value = self.evaluationFunction(miniMaxState)
-        if value is not None:
-          if bestValueMin > value:
-            bestValueMin = [value, miniMaxState]
+      else:
+        newAgent = agent + 1
+        newDepth = depth
+
 
       if agent == 0:
-        if depth < self.depth - 1:
-          actions = miniMaxState.getLegalActions(agent)
-          for action in actions:
-            state = miniMaxState.generateSuccessor(agent, action)
-            ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax,action_global,value)
-            
-            if ret is not None:
-              if bestValueMin[0] > bestValueMax[0]:
-                bestValueMax = [bestValueMin, action]
-                action_global = [bestValueMax[1]]
+        actions = miniMaxState.getLegalActions(agent)
+        for action in actions:
+          state = miniMaxState.generateSuccessor(agent, action)
+          ret_value, ret_action = miniMax(state, newDepth, newAgent)
+          if ret_value > valueMax:
+            valueMax = ret_value
+            move = action
+
 
       if agent > 0:
-        if agent < numAgents - 1:
-          actions = miniMaxState.getLegalActions(agent)
-          for action in actions:
-            state = miniMaxState.generateSuccessor(agent, action)
-            value = miniMax(state, depth, agent + 1, bestValueMin, bestValueMax,action_global,value)
+        actions = miniMaxState.getLegalActions(agent)
+        for action in actions:
+          state = miniMaxState.generateSuccessor(agent, action)
+          ret_value, ret_action = miniMax(state, newDepth, newAgent)
+          if ret_value < valueMin:
+            valueMin = ret_value
+            move = action
 
+      if agent == 0:
+        return valueMax, move
+      else:
+        return valueMin, move
 
-    action_global = Directions.STOP
-    value = 0
-    bestValueMin = [float("inf"), gameState]
-    bestValueMax =  [float("-inf"), Directions.STOP]
-    miniMax(gameState, 0, 0, bestValueMin, bestValueMax, action_global,value)
-    print action_global
-
-    return action_global
-
+    return miniMax(gameState, 0, 0)[1]
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
