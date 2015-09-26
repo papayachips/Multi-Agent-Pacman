@@ -158,44 +158,43 @@ class MinimaxAgent(MultiAgentSearchAgent):
     "*** YOUR CODE HERE ***"
 
 
-    def miniMax(miniMaxState, depth, agent, bestValueMin, bestValueMax,action_global):
-
+    def miniMax(miniMaxState, depth, agent, bestValueMin, bestValueMax,action_global, value):
       numAgents = miniMaxState.getNumAgents()
 
       if depth == self.depth - 1:
         return self.evaluationFunction(miniMaxState)
 
       if agent == numAgents - 1:
-        return self.evaluationFunction(miniMaxState)
+        agent = 0
+        value = self.evaluationFunction(miniMaxState)
+        if value is not None:
+          if bestValueMin > value:
+            bestValueMin = [value, miniMaxState]
 
       if agent == 0:
         if depth < self.depth - 1:
           actions = miniMaxState.getLegalActions(agent)
           for action in actions:
             state = miniMaxState.generateSuccessor(agent, action)
-            ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax,action_global)
+            ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax,action_global,value)
             if bestValueMin[0] > bestValueMax[0]:
               bestValueMax = [bestValueMin, action]
               action_global = action_global + [bestValueMax[1]]
-
+              
       if agent > 0:
         if agent < numAgents - 1:
           actions = miniMaxState.getLegalActions(agent)
           for action in actions:
             state = miniMaxState.generateSuccessor(agent, action)
-            ret = miniMax(state, depth, agent + 1, bestValueMin, bestValueMax,action_global)
-            if ret is not None:
-              if bestValueMin > ret:
-                bestValueMin = [ret, state]
+            value = miniMax(state, depth, agent + 1, bestValueMin, bestValueMax,action_global,value)
 
 
     action_global = []
+    value = 0
     bestValueMin = [float("inf"), gameState]
     bestValueMax =  [float("-inf"), Directions.STOP]
-    miniMax(gameState, 0, 0, bestValueMin, bestValueMax, action_global)
-    miniMax(bestValueMin[1], 0, 0, bestValueMin, bestValueMax, action_global)
-    miniMax(bestValueMin[1], 0, 0, bestValueMin, bestValueMax, action_global)
-    miniMax(bestValueMin[1], 0, 0, bestValueMin, bestValueMax, action_global)
+    miniMax(gameState, 0, 0, bestValueMin, bestValueMax, action_global,value)
+    
 
     return action_global
 
