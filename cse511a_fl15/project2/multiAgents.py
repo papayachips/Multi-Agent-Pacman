@@ -202,7 +202,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
       else:
         return valueMin, move
 
-    return miniMax(gameState, 0, 0)[1]
+    return miniMax(gameState, 0, 0)
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
