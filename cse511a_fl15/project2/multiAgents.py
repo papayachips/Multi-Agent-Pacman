@@ -183,7 +183,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         for action in actions:
           state = miniMaxState.generateSuccessor(agent, action)
           ret_value, ret_action = miniMax(state, newDepth, newAgent)
-          if ret_value >= valueMax:
+          if ret_value > valueMax:
             valueMax = ret_value
             move = action
 
@@ -193,7 +193,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
         for action in actions:
           state = miniMaxState.generateSuccessor(agent, action)
           ret_value, ret_action = miniMax(state, newDepth, newAgent)
-          if ret_value < valueMin:
+          if ret_value <= valueMin:
             valueMin = ret_value
             move = action
 
