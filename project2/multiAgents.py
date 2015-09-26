@@ -177,10 +177,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
           for action in actions:
             state = miniMaxState.generateSuccessor(agent, action)
             ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax,action_global,value)
-            if bestValueMin[0] > bestValueMax[0]:
-              bestValueMax = [bestValueMin, action]
-              action_global = action_global + [bestValueMax[1]]
-              
+            
+            if ret is not None:
+              if bestValueMin[0] > bestValueMax[0]:
+                bestValueMax = [bestValueMin, action]
+                action_global = [bestValueMax[1]]
+
       if agent > 0:
         if agent < numAgents - 1:
           actions = miniMaxState.getLegalActions(agent)
@@ -189,12 +191,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
             value = miniMax(state, depth, agent + 1, bestValueMin, bestValueMax,action_global,value)
 
 
-    action_global = []
+    action_global = Directions.STOP
     value = 0
     bestValueMin = [float("inf"), gameState]
     bestValueMax =  [float("-inf"), Directions.STOP]
     miniMax(gameState, 0, 0, bestValueMin, bestValueMax, action_global,value)
-    
+    print action_global
 
     return action_global
 
