@@ -72,30 +72,32 @@ class ReflexAgent(Agent):
     #print "newPos: " is a tuple
     #print "newGhostStates: type list, len 1, list content is object (2.0, 4.0), East " 
     #print "newFood show where is food in the scope of whole panel"
-    successorGameStates = currentGameState.generatePacmanSuccessor(action)
-    
-    #for successorGameState in successorGameState
-    ghostPosition =  successorGameState.getGhostPositions()
-
-    ghostDistance = (ghostPosition[0][0] - newPos[0]) * (ghostPosition[0][0] - newPos[0]) + (ghostPosition[0][1]- newPos[1]) * (ghostPosition[0][1]- newPos[1])
 
     score = 0
-    if ghostDistance > 2:
-      score = score+15
-      if newFood[newPos[0]][newPos[1]]:
-        score = score+20
-      else:
-        score = score+10
-    else: 
-      score = score - 5
-      if newFood[newPos[0]][newPos[1]]:
-        score = score + 10
-      else:
-        score = score - 30
+    i = -1
+    distance = 0
+    for row in newFood:
+      i += 1
+      j = -1
+      for colume in row:
+        j += 1
+        distance = manhattanDistance((i, j), newPos)
+        if (distance == 0 and colume):
+          score += 50
+        if colume:
+          score += 5/distance
 
-    return score
+    
+    ghostPositions =  successorGameState.getGhostPositions()
 
-    return successorGameState.getScore()
+    k = -1
+    for ghostPosition in ghostPositions:
+      k += 1;
+      if newScaredTimes[k] == 0:
+        if manhattanDistance(ghostPosition, newPos) < 2:
+          score -= 70
+
+    return successorGameState.getScore() + score
 
 
 def scoreEvaluationFunction(currentGameState):
@@ -156,30 +158,44 @@ class MinimaxAgent(MultiAgentSearchAgent):
     "*** YOUR CODE HERE ***"
 
 
-    AgentNumber = gameState.getNumAgents()
+    def miniMax (miniMaxState, depth, agent, bestValueMin, bestValueMax):
+      print depth
 
-    chosen_score = 0;
-    actions = [];
-    agentNo = 1;
+      numAgents = miniMaxState.getNumAgents()
 
-    if self.depth == 0:
-      chosen_score = self.evaluationFunction();
-      return tuple(chosen_score, actions)
+      if depth == self.depth - 1:
+        return self.evaluationFunction(miniMaxState)
 
-    else:
-      actions = gameState.getLegalActions(agentNo);
-      if len(actions) == 0:
-        chosen_score = self.evaluationFunction();
-      else:
-        best_score = float("-inf")
-        for action in actions:
-          while agentNo <= AgentNumber:
-            game = gameState.generateSuccessor(agentNo, action)
-            ret = self.getAction(game)
-            if ret[0] > best_score:
-              best_score = ret[0]
-              actions = actions + [action]
-            agentNo = agentNo + 1
+      if agent == numAgents - 1:
+        return self.evaluationFunction(miniMaxState)
+
+      if agent == 0:
+        if depth < self.depth - 1:
+          actions = miniMaxState.getLegalActions(agent)
+          for action in actions:
+            state = miniMaxState.generateSuccessor(agent, action)
+            ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax)
+            if bestValueMin[0] > bestValueMax[0]:
+              bestValueMax = [bestValueMin, action]
+              action_global = [bestValueMax[1]]
+
+      if agent > 0:
+        if agent < numAgents - 1:
+          actions = miniMaxState.getLegalActions(agent)
+          for action in actions:
+            state = miniMaxState.generateSuccessor(agent, action)
+            ret = miniMax(state, depth + 1, agent + 1, bestValueMin, bestValueMax)
+            if ret is not None:
+              if bestValueMin > ret:
+                bestValueMin = [ret, state]
+
+    action_global = Directions.STOP
+    bestValueMin = [float("inf"), gameState]
+    bestValueMax =  [float("-inf"), Directions.STOP]
+    miniMax(gameState, 0, 0, bestValueMin, bestValueMax)
+
+    return action_global
+
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
