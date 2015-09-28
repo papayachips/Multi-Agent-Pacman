@@ -210,7 +210,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
         return valueMin, moveGhost
 
     ret =  miniMax(gameState, 0, 0)[1]
-    print ret
     return ret
 
 
@@ -287,7 +286,6 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
         return valueMin, moveGhost
 
     ret =  alphabeta(gameState, 0, 0, float("-inf"), float("inf"))[1]
-    print ret
     return ret
 
 
