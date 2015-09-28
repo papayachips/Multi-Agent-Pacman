@@ -257,8 +257,9 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             valueMax = ret_value
             movePac = action
 
-          if alpha < ret_value:
-            alpha = ret_value
+          if alpha < valueMax:
+            alpha = valueMax
+
           if beta <= alpha:
             break;
 
@@ -273,8 +274,8 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
             valueMin = ret_value
             moveGhost = action
 
-          if beta > ret_value:
-            beta = ret_value
+          if beta > valueMin:
+            beta = valueMin
 
           if beta <= alpha:
             break;
@@ -303,7 +304,14 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       legal moves.
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def expectiminimax(expectState, depth):
+      if depth == self.depth:
+        return self.evaluationFunction(miniMaxState), None
+
+
+
+    
+
 
 def betterEvaluationFunction(currentGameState):
   """
