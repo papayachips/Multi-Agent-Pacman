@@ -169,6 +169,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
       if depth == self.depth:
         return self.evaluationFunction(miniMaxState), None
 
+
       if agent == numAgent - 1:
         newAgent = 0
         newDepth = depth + 1
@@ -180,6 +181,8 @@ class MinimaxAgent(MultiAgentSearchAgent):
 
       if agent == 0:
         actions = miniMaxState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(miniMaxState), None
         for action in actions:
           if action is Directions.STOP:
             continue
@@ -188,9 +191,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
           if ret_value > valueMax:
             valueMax = ret_value
             movePac = action
+            print valueMax, movePac
 
       if agent > 0:
         actions = miniMaxState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(miniMaxState), None
         for action in actions:
           state = miniMaxState.generateSuccessor(agent, action)
           ret_value, ret_action = miniMax(state, newDepth, newAgent)
