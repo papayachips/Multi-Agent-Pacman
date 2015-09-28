@@ -191,7 +191,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
           if ret_value > valueMax:
             valueMax = ret_value
             movePac = action
-            print valueMax, movePac
 
       if agent > 0:
         actions = miniMaxState.getLegalActions(agent)
