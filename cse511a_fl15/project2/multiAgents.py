@@ -304,9 +304,30 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       legal moves.
     """
     "*** YOUR CODE HERE ***"
-    def expectiminimax(expectState, depth):
+    def expectimax(expectState, depth):
+      alpha = 0
+      valueMax = float("-inf")
+      movePac = Directions.STOP
+
       if depth == self.depth:
-        return self.evaluationFunction(miniMaxState), None
+        return self.evaluationFunction(expectState), None
+
+      actions = expectState.getLegalActions(0);
+      actionsLen = len(actions)
+      if actions == []:
+        return self.evaluationFunction(expectState), None
+
+      for action in actions:
+        state = expectState.generateSuccessor(0, action)
+        alpha = alpha + expectimax(state, depth + 1)[0]/actionsLen
+        if alpha > valueMax:
+          valueMax = alpha
+          movePac = action
+
+      return valueMax, movePac
+
+    ret = expectimax(gameState, 0)[1]
+    return ret
 
 
 
