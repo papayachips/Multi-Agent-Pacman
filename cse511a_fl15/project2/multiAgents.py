@@ -93,9 +93,8 @@ class ReflexAgent(Agent):
     k = -1
     for ghostPosition in ghostPositions:
       k += 1;
-      if newScaredTimes[k] == 0:
-        if manhattanDistance(ghostPosition, newPos) < 2:
-          score -= 70
+      if manhattanDistance(ghostPosition, newPos) < 2:
+        score -= 70
 
     return successorGameState.getScore() + score
 
@@ -164,10 +163,11 @@ class MinimaxAgent(MultiAgentSearchAgent):
       newDepth = 0
       valueMax = float("-inf")
       valueMin = float("inf")
-      move = Directions.STOP
+      movePac = Directions.STOP
+      moveGhost = Directions.STOP
 
       if depth == self.depth:
-        return self.evaluationFunction(miniMaxState), Directions.STOP
+        return self.evaluationFunction(miniMaxState), None
 
       if agent == numAgent - 1:
         newAgent = 0
@@ -181,12 +181,13 @@ class MinimaxAgent(MultiAgentSearchAgent):
       if agent == 0:
         actions = miniMaxState.getLegalActions(agent)
         for action in actions:
+          if action is Directions.STOP:
+            continue
           state = miniMaxState.generateSuccessor(agent, action)
           ret_value, ret_action = miniMax(state, newDepth, newAgent)
           if ret_value > valueMax:
             valueMax = ret_value
-            move = action
-
+            movePac = action
 
       if agent > 0:
         actions = miniMaxState.getLegalActions(agent)
@@ -195,13 +196,16 @@ class MinimaxAgent(MultiAgentSearchAgent):
           ret_value, ret_action = miniMax(state, newDepth, newAgent)
           if ret_value < valueMin:
             valueMin = ret_value
-            move = action
+            moveGhost = action
 
       if agent == 0:
-        return valueMax, move
+        return valueMax, movePac
       else:
-        return valueMin, move
-    return miniMax(gameState, 1, 0)[1]
+        return valueMin, moveGhost
+
+    ret =  miniMax(gameState, 0, 0)[1]
+    print ret
+    return ret
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):
