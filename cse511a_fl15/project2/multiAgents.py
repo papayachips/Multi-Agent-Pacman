@@ -224,7 +224,74 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
       Returns the minimax action using self.depth and self.evaluationFunction
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    def alphabeta(miniMaxState, depth, agent, alpha, beta):
+      numAgent = miniMaxState.getNumAgents()
+      newAgent = 0
+      newDepth = 0
+      valueMax = float("-inf")
+      valueMin = float("inf")
+      movePac = Directions.STOP
+      moveGhost = Directions.STOP
+
+      if depth == self.depth:
+        return self.evaluationFunction(miniMaxState), None
+
+
+      if agent == numAgent - 1:
+        newAgent = 0
+        newDepth = depth + 1
+
+      else:
+        newAgent = agent + 1
+        newDepth = depth
+
+
+      if agent == 0:
+        actions = miniMaxState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(miniMaxState), None
+        for action in actions:
+          if action is Directions.STOP:
+            continue
+          state = miniMaxState.generateSuccessor(agent, action)
+          ret_value, ret_action = alphabeta(state, newDepth, newAgent, alpha, beta)
+          if ret_value > valueMax:
+            valueMax = ret_value
+            movePac = action
+
+          if alpha < ret_value:
+            alpha = ret_value
+          if beta <= alpha:
+            break;
+
+      if agent > 0:
+        actions = miniMaxState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(miniMaxState), None
+        for action in actions:
+          state = miniMaxState.generateSuccessor(agent, action)
+          ret_value, ret_action = alphabeta(state, newDepth, newAgent, alpha, beta)
+          if ret_value < valueMin:
+            valueMin = ret_value
+            moveGhost = action
+
+          if beta > ret_value:
+            beta = ret_value
+
+          if beta <= alpha:
+            break;
+
+      if agent == 0:
+        return valueMax, movePac
+      else:
+        return valueMin, moveGhost
+
+    ret =  alphabeta(gameState, 0, 0, float("-inf"), float("inf"))[1]
+    print ret
+    return ret
+
+
+    
 
 class ExpectimaxAgent(MultiAgentSearchAgent):
   """
