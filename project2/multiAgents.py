@@ -304,29 +304,61 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       legal moves.
     """
     "*** YOUR CODE HERE ***"
-    def expectimax(expectState, depth):
-      alpha = 0
+    def expectimax(expectState, depth, agent):
+      numAgent = expectState.getNumAgents()
+      newAgent = 0
+      newDepth = 0
       valueMax = float("-inf")
+      valueMin = float("inf")
+      alpha = 0
       movePac = Directions.STOP
+      moveGhost = Directions.STOP
 
       if depth == self.depth:
         return self.evaluationFunction(expectState), None
 
-      actions = expectState.getLegalActions(0);
-      actionsLen = len(actions)
-      if actions == []:
-        return self.evaluationFunction(expectState), None
 
-      for action in actions:
-        state = expectState.generateSuccessor(0, action)
-        alpha = alpha + expectimax(state, depth + 1)[0]/actionsLen
-        if alpha > valueMax:
-          valueMax = alpha
-          movePac = action
+      if agent == numAgent - 1:
+        newAgent = 0
+        newDepth = depth + 1
 
-      return valueMax, movePac
+      else:
+        newAgent = agent + 1
+        newDepth = depth
 
-    ret = expectimax(gameState, 0)[1]
+
+      if agent == 0:
+        actions = expectState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(expectState), None
+        for action in actions:
+          if action is Directions.STOP:
+            continue
+          state = expectState.generateSuccessor(agent, action)
+          ret_value, ret_action = expectimax(state, newDepth, newAgent)
+          if ret_value > valueMax:
+            valueMax = ret_value
+            movePac = action
+
+      if agent > 0:
+        actions = expectState.getLegalActions(agent)
+        if actions == []:
+          return self.evaluationFunction(expectState), None
+        actions_len = len(actions)
+        for action in actions:
+          state = expectState.generateSuccessor(agent, action)
+          ret_value, ret_action = expectimax(state, newDepth, newAgent)
+          alpha = alpha + ret_value/actions_len
+          if alpha < valueMin:
+            valueMin = alpha
+            moveGhost = action
+
+      if agent == 0:
+        return valueMax, movePac
+      else:
+        return valueMin, moveGhost
+
+    ret =  expectimax(gameState, 0, 0)[1]
     return ret
 
 
