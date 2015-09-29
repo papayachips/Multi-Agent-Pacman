@@ -446,9 +446,12 @@ class ContestAgent(MultiAgentSearchAgent):
 
     k = -1
     for ghostPosition in ghostPositions:
-      k += 1;
+      k += 1
       if manhattanDistance(ghostPosition, newPos) < 2:
-        score -= 70
+        if newScaredTimes[k] > 0:
+          score += 30
+        else:
+          score -= 70 
 
     return successorGameState.getScore() + score
     
