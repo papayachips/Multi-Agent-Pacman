@@ -396,7 +396,6 @@ def betterEvaluationFunction(currentGameState):
 
   
   ghostPositions =  successorGameState.getGhostPositions()
-
   k = -1
   for ghostPosition in ghostPositions:
     k += 1;
