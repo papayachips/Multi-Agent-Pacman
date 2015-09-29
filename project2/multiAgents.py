@@ -374,7 +374,36 @@ def betterEvaluationFunction(currentGameState):
     DESCRIPTION: <write something here so we know what you did>
   """
   "*** YOUR CODE HERE ***"
-  util.raiseNotDefined()
+  successorGameState = currentGameState
+  newPos = successorGameState.getPacmanPosition()
+  newFood = successorGameState.getFood()
+  newGhostStates = successorGameState.getGhostStates()
+  newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+    
+  score = 0
+  i = -1
+  distance = 0
+  for row in newFood:
+    i += 1
+    j = -1
+    for colume in row:
+      j += 1
+      distance = manhattanDistance((i, j), newPos)
+      if (distance == 0 and colume):
+        score += 50
+      if colume:
+        score += 5/distance
+
+  
+  ghostPositions =  successorGameState.getGhostPositions()
+
+  k = -1
+  for ghostPosition in ghostPositions:
+    k += 1;
+    if manhattanDistance(ghostPosition, newPos) < 2:
+      score -= 70
+
+  return successorGameState.getScore() + score
 
 # Abbreviation
 better = betterEvaluationFunction
@@ -398,7 +427,7 @@ class ContestAgent(MultiAgentSearchAgent):
     newFood = successorGameState.getFood()
     newGhostStates = successorGameState.getGhostStates()
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
-    
+
     score = 0
     i = -1
     distance = 0
