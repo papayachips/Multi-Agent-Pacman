@@ -389,8 +389,7 @@ def betterEvaluationFunction(currentGameState):
     j = -1
     for colume in row:
       j += 1
-      distance = math.sqrt(math.pow(newPos[0] - i,2) + math.pow(newPos[1] - j, 2))
-      #manhattanDistance((i, j), newPos)
+      distance = manhattanDistance((i, j), newPos)
       if (distance == 0 and colume):
         score += 50
       if colume:
@@ -401,9 +400,8 @@ def betterEvaluationFunction(currentGameState):
   k = -1
   for ghostPosition in ghostPositions:
     k += 1
-    distance = math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1
-      ], 2))
-    if distance < 2.5:
+    distance = math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1], 2))
+    if distance < 2:
       score -= 70
 
   return successorGameState.getScore() + score
