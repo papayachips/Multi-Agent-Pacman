@@ -9,6 +9,7 @@
 from util import manhattanDistance
 from game import Directions
 import random, util
+import math
 
 from game import Agent
 
@@ -388,7 +389,8 @@ def betterEvaluationFunction(currentGameState):
     j = -1
     for colume in row:
       j += 1
-      distance = manhattanDistance((i, j), newPos)
+      distance = math.sqrt(math.pow(newPos[0] - i,2) + math.pow(newPos[1] - j, 2))
+      #manhattanDistance((i, j), newPos)
       if (distance == 0 and colume):
         score += 50
       if colume:
@@ -398,8 +400,10 @@ def betterEvaluationFunction(currentGameState):
   ghostPositions =  successorGameState.getGhostPositions()
   k = -1
   for ghostPosition in ghostPositions:
-    k += 1;
-    if manhattanDistance(ghostPosition, newPos) < 2:
+    k += 1
+    distance = math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1
+      ], 2))
+    if distance < 2.5:
       score -= 70
 
   return successorGameState.getScore() + score
@@ -451,7 +455,7 @@ class ContestAgent(MultiAgentSearchAgent):
         if newScaredTimes[k] > 0:
           score += 30
         else:
-          score -= 70 
+          score -= 70
 
     return successorGameState.getScore() + score
     
