@@ -400,14 +400,13 @@ def betterEvaluationFunction(currentGameState):
   k = -1
   for ghostPosition in ghostPositions:
     k += 1
-    minScaredtime = min(newScaredTimes)
+    minScaredTime = min(newScaredTimes)
     distance = math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1], 2))
-    
-    if distance < 1.5:
-      if minScaredtime > 2:
-        score += 10
-      else: 
-        score -= 70
+
+    if (distance < 1.5):
+      score -= 70
+    if (distance == 0 and minScaredTime > 1):
+      score += 80
 
   return successorGameState.getScore() + score
 
