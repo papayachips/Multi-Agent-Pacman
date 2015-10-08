@@ -375,7 +375,6 @@ def betterEvaluationFunction(currentGameState):
     DESCRIPTION: <write something here so we know what you did>
   """
   "*** YOUR CODE HERE ***"
-  from numpy import matrix
 
   successorGameState = currentGameState
   newPos = successorGameState.getPacmanPosition()
@@ -400,13 +399,11 @@ def betterEvaluationFunction(currentGameState):
   
   ghostPositions =  successorGameState.getGhostPositions()
   distance = [math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1], 2)) for ghostPosition in ghostPositions]
-  dist_matrix = matrix(distance)
-  scared_matrix = matrix(newScaredTimes)
-  diffs = (scared_matrix - dist_matrix).tolist()
-  if all(diff >= 1 for diff in diffs):
-    score += 0
-  else:
-    score = -70
+  indexes = [newScaredTimes.index(scared_time) for scared_time in newScaredTimes if scared_time > 0]
+  if (indexes == [] and not all(dist >= 1.5 for dist in distance)):
+    score -= 70
+
+
 
   return successorGameState.getScore() + score
 
