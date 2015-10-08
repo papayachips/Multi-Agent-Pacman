@@ -399,10 +399,15 @@ def betterEvaluationFunction(currentGameState):
   
   ghostPositions =  successorGameState.getGhostPositions()
   distance = [math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1], 2)) for ghostPosition in ghostPositions]
-  indexes = [newScaredTimes.index(scared_time) for scared_time in newScaredTimes if scared_time > 0]
+  indexes = [newScaredTimes.index(scared_time) for scared_time in newScaredTimes if scared_time > 2]
   if (indexes == [] and not all(dist >= 1.5 for dist in distance)):
     score -= 70
-
+  dist_indexes = [distance.index(dist) for dist in distance if dist < 1.5]
+  if (indexes is not [] and indexes == dist_indexes):
+    score += 0
+  if (indexes is not [] and indexes is not dist_indexes):
+    score -70
+    #indexes_modified = [index in indexes if (distance[index] < 1.5 and newScaredTimes[index] > distance[index])]
 
 
   return successorGameState.getScore() + score
