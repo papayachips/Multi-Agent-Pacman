@@ -392,7 +392,7 @@ def betterEvaluationFunction(currentGameState):
       j += 1
       distance = manhattanDistance((i, j), newPos)
       if (distance == 0 and colume):
-        score += 50
+        score += 500
       if colume:
         score += 5/distance
 
@@ -401,13 +401,13 @@ def betterEvaluationFunction(currentGameState):
   distance = [math.sqrt(math.pow(newPos[0] - ghostPosition[0],2) + math.pow(newPos[1] - ghostPosition[1], 2)) for ghostPosition in ghostPositions]
   indexes = [newScaredTimes.index(scared_time) for scared_time in newScaredTimes if scared_time > 3]
   if (indexes == [] and not all(dist >= 1.5 for dist in distance)):
-    score -= 100
+    score -= 1000
 
   dist_indexes = [distance.index(dist) for dist in distance if dist < 1.5]
   if (indexes is not [] and all(index in indexes for index in dist_indexes)):
     score += 10000
   if (indexes is not [] and not all(index in indexes for index in dist_indexes)):
-    score = -100
+    score = -1000
   return successorGameState.getScore() + score
 
 # Abbreviation
