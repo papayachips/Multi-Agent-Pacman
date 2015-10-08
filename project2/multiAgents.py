@@ -404,9 +404,9 @@ def betterEvaluationFunction(currentGameState):
     score -= 70
 
   dist_indexes = [distance.index(dist) for dist in distance if dist < 1.5]
-  if all(index in indexes for index in dist_indexes):
+  if (indexes is not [] and all(index in indexes for index in dist_indexes)):
     score += 1000
-  else:
+  if (indexes is not [] and not all(index in indexes for index in dist_indexes)):
     score = -70
     #indexes_modified = [index in indexes if (distance[index] < 1.5 and newScaredTimes[index] > distance[index])]
 
