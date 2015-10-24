@@ -37,20 +37,26 @@ class ValueIterationAgent(ValueEstimationAgent):
     self.values = util.Counter() # A Counter is a dict with default 0
     
     "*** YOUR CODE HERE ***"
-    
-    def valueIteration(mdp, discount, iterations, values):
+
+    def valueIteration(mdp, discount, iterations, new_values):
       states = mdp.getStates()
       depth = 0
+
       while depth < iterations:
         depth += 1
+        new_values = util.Counter()
         for state in states:
           actions = mdp.getPossibleActions(state)
+          Qs = []
           for action in actions:
             Q = self.getQValue(state, action)
-            if self.values[state] < Q:
-              self.values[state] = Q
+            Qs += [Q]
+          if Qs == []:
+            continue
+          new_values[state] = max(Qs)
+        self.values = new_values
 
-    valueIteration(mdp, discount, iterations, self.values)
+    valueIteration(mdp, discount, iterations, util.Counter())
     
   def getValue(self, state):
     """
@@ -83,22 +89,19 @@ class ValueIterationAgent(ValueEstimationAgent):
       terminal state, you should return None.
     """
     "*** YOUR CODE HERE ***"
-    
+
     maxvalue = float("-inf")
+    maxaction = None
     actions = self.mdp.getPossibleActions(state)
 
-    if actions == ():
+    if not actions or self.mdp.isTerminal(state):
       return None
-
-    maxaction = actions[0]
-    for action in actions:
-      nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
-      for nextState_prob in nextStates_probs:
-        temp = nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.getValue(nextState_prob[0]))
-        if temp > maxvalue:
+    else:
+      for action in actions:
+        if self.getQValue(state, action) > maxvalue:
+          maxvalue = self.getQValue(state, action)
           maxaction = action
-    return maxaction
-    
+      return maxaction
 
   def getAction(self, state):
     "Returns the policy at the state (no exploration)."
