@@ -69,11 +69,9 @@ class ValueIterationAgent(ValueEstimationAgent):
     """
     "*** YOUR CODE HERE ***"
     sum = 0
-    actions = self.mdp.getPossibleActions(state)
-    for action in actions:
-      nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
-      for nextState_prob in nextStates_probs:
-        sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.values[nextState_prob[0]])
+    nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
+    for nextState_prob in nextStates_probs:
+      sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.getValue(nextState_prob[0]))
     return sum
 
   def getPolicy(self, state):
