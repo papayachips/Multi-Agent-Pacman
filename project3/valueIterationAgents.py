@@ -37,39 +37,22 @@ class ValueIterationAgent(ValueEstimationAgent):
     self.values = util.Counter() # A Counter is a dict with default 0
     
     "*** YOUR CODE HERE ***"
-    '''
-    def valueIteration(mdp, discount, depth, iterations, state, action):
-      maxValues = float("-inf")
-      maxAction = action
-      retValues = util.Counter()
-
-      if depth == iterations:
-        return retValues, maxAction
-
-      if isTerminal(state):
-        newDepth = depth + 1
-        state = mdp.getStartState()
-        actions = mdp.getPossibleActions(state)        
-      else:
-        newDepth = depth
-
-      actions = mdp.getPossibleActions(state)
-      for action in actions:
-        nextStates_probs = mdp.getTransitionStatesAndProbs(state, action)
-        rewards = util.Counter()
-        probs = util.Counter()
-        for nextState_prob in nextStates_probs:
-          rewards[nextState_prob[0]] = mdp.getReward(state, action, nextState_prob[0])
-          probs[nextState_prob[1]] = nextState_prob[1]
-        value = (rewards + (valueIteration(mdp, discount, newDepth, iterations, nextState_prob[0], action).divideAll(1.0/discount))) * probs
-        if value > maxValues:
-          maxValues = value
-          retValues = (valueIteration(mdp, discount, newDepth, iterations, nextState_prob[0], action)
-          maxAction = action
-
-
-    return valueIteration(mdp, discount, 0, iterations, mdp.getStartState(), None)[0]
-    '''
+    
+    def valueIteration(mdp, discount, depth, iterations):
+      states = mdp.getStates()
+      while depth < iterations:
+        for state in states:
+          actions = mdp.getPossibleActions(state)
+          Qmax = float("-inf")
+          Qact = actions[0]
+          for action in actions:
+            Q = getQValue(state, action)
+            if Q > Qmax:
+              Qmax = Q
+              Qact = action
+          values[state] = Qmax 
+      return values
+    
   def getValue(self, state):
     """
       Return the value of the state (computed in __init__).
@@ -91,8 +74,6 @@ class ValueIterationAgent(ValueEstimationAgent):
     for action in actions:
       nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
       for nextState_prob in nextStates_probs:
-        print "nextState_prob[0]", self.getValue(nextState_prob[0])
-        print self.getValue(nextState_prob[0])
         sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.getValue(nextState_prob[0]))
         print sum
     return sum
