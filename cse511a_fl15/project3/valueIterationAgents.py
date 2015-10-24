@@ -38,20 +38,19 @@ class ValueIterationAgent(ValueEstimationAgent):
     
     "*** YOUR CODE HERE ***"
     
-    def valueIteration(mdp, discount, depth, iterations):
+    def valueIteration(mdp, discount, iterations, values):
       states = mdp.getStates()
+      depth = 0
       while depth < iterations:
+        depth += 1
         for state in states:
           actions = mdp.getPossibleActions(state)
-          Qmax = float("-inf")
-          Qact = actions[0]
           for action in actions:
-            Q = getQValue(state, action)
-            if Q > Qmax:
-              Qmax = Q
-              Qact = action
-          values[state] = Qmax 
-      return values
+            Q = self.getQValue(state, action)
+            if self.values[state] < Q:
+              self.values[state] = Q
+
+    valueIteration(mdp, discount, iterations, self.values)
     
   def getValue(self, state):
     """
@@ -74,8 +73,7 @@ class ValueIterationAgent(ValueEstimationAgent):
     for action in actions:
       nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
       for nextState_prob in nextStates_probs:
-        sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.getValue(nextState_prob[0]))
-        print sum
+        sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.values[nextState_prob[0]])
     return sum
 
   def getPolicy(self, state):
