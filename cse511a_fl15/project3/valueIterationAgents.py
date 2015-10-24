@@ -40,7 +40,7 @@ class ValueIterationAgent(ValueEstimationAgent):
     '''
     def valueIteration(mdp, discount, depth, iterations, state, action):
       maxValues = float("-inf")
-      maxAction = Directions.STOP
+      maxAction = action
       retValues = util.Counter()
 
       if depth == iterations:
@@ -68,9 +68,8 @@ class ValueIterationAgent(ValueEstimationAgent):
           maxAction = action
 
 
-    return valueIteration(mdp, discount, 0, iterations, mdp.getStartState(), None)[1]
-'''
-    
+    return valueIteration(mdp, discount, 0, iterations, mdp.getStartState(), None)[0]
+    '''
   def getValue(self, state):
     """
       Return the value of the state (computed in __init__).
@@ -92,7 +91,10 @@ class ValueIterationAgent(ValueEstimationAgent):
     for action in actions:
       nextStates_probs = self.mdp.getTransitionStatesAndProbs(state, action)
       for nextState_prob in nextStates_probs:
+        print "nextState_prob[0]", self.getValue(nextState_prob[0])
+        print self.getValue(nextState_prob[0])
         sum += nextState_prob[1] * (self.mdp.getReward(state, action, nextState_prob[0]) + self.discount * self.getValue(nextState_prob[0]))
+        print sum
     return sum
 
   def getPolicy(self, state):
