@@ -38,7 +38,7 @@ class QLearningAgent(ReinforcementAgent):
     ReinforcementAgent.__init__(self, **args)
     "*** YOUR CODE HERE ***"
     self.Qs = util.Counter()
-    self.Vs = util.Counter()
+
   def getQValue(self, state, action):
     """
       Returns Q(state,action)
@@ -48,14 +48,10 @@ class QLearningAgent(ReinforcementAgent):
     "*** YOUR CODE HERE ***"
     maxvalue = float("-inf")
 
-    if self.Qs[state] == 0:
+    if self.Qs[(state, action)] == 0:
       return 0.0
 
-    actions = self.getLegalActions(state)
-    sum_Q = 0
-    for action in actions:
-      sum_Q += self.epsilon*(self.alpha + self.discount*self.getValue(state))
-    return sum_Q
+    return self.Qs[(state, action)]
 
 
   def getValue(self, state):
@@ -121,7 +117,7 @@ class QLearningAgent(ReinforcementAgent):
     if util.flipCoin(self.epsilon):
       return random.choice(legalActions)
 
-    return self.getAction(state)
+    return self.getPolicy(state)
 
   def update(self, state, action, nextState, reward):
     """
@@ -133,7 +129,7 @@ class QLearningAgent(ReinforcementAgent):
       it will be called on your behalf
     """
     "*** YOUR CODE HERE ***"
-    self.Vs[state] = (1 - self.alpha) * self.Vs[state] + self.alpha * (reward + self.discount * self.Vs[nextState])
+    self.Qs[(state, action)] = (1 - self.alpha) * self.Qs[(state, action)] + self.alpha * (reward + self.discount * self.getValue(nextState))
 
 class PacmanQAgent(QLearningAgent):
   "Exactly the same as QLearningAgent, but with different default parameters"
