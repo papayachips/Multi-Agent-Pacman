@@ -115,9 +115,6 @@ class QLearningAgent(ReinforcementAgent):
 
     if util.flipCoin(self.epsilon):
       return random.choice(legalActions)
-    
-    maxaction = None
-    maxvalue = float("-inf")
 
     return self.getPolicy(state)
 
