@@ -92,16 +92,16 @@ class ValueIterationAgent(ValueEstimationAgent):
 
     maxvalue = float("-inf")
     maxaction = None
-    actions = self.mdp.getPossibleActions(state)
 
+    actions = self.mdp.getPossibleActions(state)
     if not actions or self.mdp.isTerminal(state):
       return None
-    else:
-      for action in actions:
-        if self.getQValue(state, action) > maxvalue:
-          maxvalue = self.getQValue(state, action)
-          maxaction = action
-      return maxaction
+      
+    for action in actions:
+      if self.getQValue(state, action) > maxvalue:
+        maxvalue = self.getQValue(state, action)
+        maxaction = action
+    return maxaction
 
   def getAction(self, state):
     "Returns the policy at the state (no exploration)."
