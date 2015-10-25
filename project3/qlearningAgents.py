@@ -68,7 +68,7 @@ class QLearningAgent(ReinforcementAgent):
     if not actions:
       return 0.0
     for action in actions:
-      Q = self.getQValue(state, action)
+      Q = self.Qs[(state, action)]
       if Q > maxvalue:
         maxvalue = Q
     return maxvalue
@@ -88,7 +88,7 @@ class QLearningAgent(ReinforcementAgent):
       return None
 
     for action in actions:
-      Q = self.getQValue(state, action)
+      Q = self.Qs[(state, action)]
       if Q > maxvalue:
         maxvalue = Q
         maxaction = action
