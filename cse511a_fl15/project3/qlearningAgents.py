@@ -93,8 +93,6 @@ class QLearningAgent(ReinforcementAgent):
         maxaction = action
     return action
 
-
-
   def getAction(self, state):
     """
       Compute the action to take in the current state.  With
@@ -112,7 +110,7 @@ class QLearningAgent(ReinforcementAgent):
     "*** YOUR CODE HERE ***"
 
     if legalActions == ():
-      return action
+      return None
 
     if util.flipCoin(self.epsilon):
       return random.choice(legalActions)
