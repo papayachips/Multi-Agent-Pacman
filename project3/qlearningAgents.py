@@ -46,10 +46,9 @@ class QLearningAgent(ReinforcementAgent):
       a state or (state,action) tuple
     """
     "*** YOUR CODE HERE ***"
-    maxvalue = float("-inf")
 
-    if self.Qs[(state, action)] == 0:
-      return 0.0
+    #if self.Qs[(state, action)] == 0:
+    #  return 0.0
 
     return self.Qs[(state, action)]
 
@@ -178,6 +177,8 @@ class ApproximateQAgent(PacmanQAgent):
 
     # You might want to initialize weights here.
     "*** YOUR CODE HERE ***"
+    self.weights = util.Counter()
+
 
   def getQValue(self, state, action):
     """
@@ -185,14 +186,19 @@ class ApproximateQAgent(PacmanQAgent):
       where * is the dotProduct operator
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+
+    self.Qs[(state, action)] = self.weights[(state, action)] * self.featExtractor.getFeatures(state, action)[(state, action)]
+    return self.Qs[(state, action)]
 
   def update(self, state, action, nextState, reward):
     """
        Should update your weights based on transition
     """
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    difference = (reward + self.discount * self.getValue(nextState)) - self.getQValue(state, action)
+    self.Qs[(state, action)] = self.getQValue(state, action) + self.alpha * difference
+    self.weights[(state, action)] = self.weights[(state, action)] + self.alpha * difference * self.featExtractor.getFeatures(state, action)[(state, action)]
+
 
   def final(self, state):
     "Called at the end of each game."
@@ -203,4 +209,5 @@ class ApproximateQAgent(PacmanQAgent):
     if self.episodesSoFar == self.numTraining:
       # you might want to print your weights here for debugging
       "*** YOUR CODE HERE ***"
+      print self.weights
       pass
