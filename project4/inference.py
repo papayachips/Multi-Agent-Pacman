@@ -148,7 +148,7 @@ class ExactInference(InferenceModule):
     "*** YOUR CODE HERE ***"
     for key in allPossible:
       self.beliefs[key] = allPossible[key]
-
+      
     
   def elapseTime(self, gameState):
     """
