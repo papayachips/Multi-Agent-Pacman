@@ -131,8 +131,8 @@ class ExactInference(InferenceModule):
     # Replace this code with a correct observation update
     # Be sure to handle the jail.
     if noisyDistance == None:
-      for key in self.beliefs:
-        self.beliefs[key] = self.getJailPosition()
+      for key in self.legalPositions:
+        self.beliefs[key] = self.getJailPosition()      
       return noisyDistance
 
 
