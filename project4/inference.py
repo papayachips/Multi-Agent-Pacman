@@ -131,7 +131,7 @@ class ExactInference(InferenceModule):
     # Replace this code with a correct observation update
     # Be sure to handle the jail.
     if noisyDistance == None:
-      self.believes[self.getJailPosition()] = 1
+      self.beliefs[self.getJailPosition()] = 1
 
     allPossible = util.Counter()
     for p in self.legalPositions:
