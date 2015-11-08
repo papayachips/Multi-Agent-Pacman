@@ -194,8 +194,6 @@ class ExactInference(InferenceModule):
     
     "*** YOUR CODE HERE ***"
     allPossible = util.Counter()
-    print self.beliefs
-    
     
     for oldPos in self.legalPositions:
       newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
