@@ -131,10 +131,7 @@ class ExactInference(InferenceModule):
     # Replace this code with a correct observation update
     # Be sure to handle the jail.
     if noisyDistance == None:
-      for key in self.beliefs:
-        self.beliefs[key] = self.getJailPosition()      
-      return noisyDistance
-
+      self.believes[self.getJailPosition()] = 1
 
     allPossible = util.Counter()
     for p in self.legalPositions:
@@ -146,12 +143,10 @@ class ExactInference(InferenceModule):
         allPossible[p] = 0
 
     allPossible.normalize()
-
-
         
     "*** YOUR CODE HERE ***"
-    for key in allPossible:
-      self.beliefs[key] = allPossible[key]
+    self.beliefs = allPossible
+
 
     
   def elapseTime(self, gameState):
@@ -198,6 +193,16 @@ class ExactInference(InferenceModule):
     """
     
     "*** YOUR CODE HERE ***"
+    allPossible = util.Counter()
+    print self.beliefs
+    
+    
+    for oldPos in self.legalPositions:
+      newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
+      for newPos, prob in newPosDist.items():
+        allPossible[newPos] += newPosDist[newPos] * self.beliefs[oldPos]
+    self.beliefs = allPossible
+
 
   def getBeliefDistribution(self):
     return self.beliefs
