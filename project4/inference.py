@@ -290,7 +290,7 @@ class ParticleFilter(InferenceModule):
     newParticles = []
     for particle in self.particles:
       newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, particle))
-      newParticles.append(util.sample(newPosDist)))
+      newParticles.append(util.sample(newPosDist))
 
     self.particles = newParticles  
   '''
@@ -358,11 +358,6 @@ class JointParticleFilter:
       ghostsPos = [random.choice(self.legalPositions) for j in range(self.numGhosts)]
       self.particles.append(tuple(ghostsPos))
 
-    self.beliefs = util.Counter()
-    for particle in self.particles:
-      self.beliefs[particle] = 1.0
-    self.beliefs.normalize()
-
   def addGhostAgent(self, agent):
     "Each ghost agent is registered separately and stored (in case they are different)."
     self.ghostAgents.append(agent)
@@ -417,30 +412,10 @@ class JointParticleFilter:
     self.beliefs = allPossible
     '''
     newParticles = []
-    allPossible = util.Counter()
-
-    for oldParticle in self.particles:
-      newParticle = list(oldParticle) # A list of ghost positions
-      "*** YOUR CODE HERE ***"
-
-      each_ghost = 1
-      for i in range(self.numGhosts):
-
-        newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, newParticle),
-                                                   i, self.ghostAgents[i])
-        each_ghost_pos = 0
-        for newPos, prob in newPosDist.items():
-
-          each_ghost_pos += newPosDist[newPos] * self.beliefs[tuple(newParticle)]
-
-        each_ghost *= each_ghost_pos 
-
-
-      newParticles.append(tuple(newParticle))
-      allPossible[tuple(newParticle)] = each_ghost 
-
-    self.particles = newParticles
-    self.beliefs = allPossible
+    for particle in self.particles
+    for i in range(self.numParticles):
+      newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, ))
+    
 
   def getJailPosition(self, i):
     return (2 * i + 1, 1);
