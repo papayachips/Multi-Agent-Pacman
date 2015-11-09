@@ -465,7 +465,6 @@ class JointParticleFilter:
           self.particles[j] = tuple(newParticle)
     return
 
-    newParticles = []
     weights = util.Counter()
 
 
@@ -480,7 +479,8 @@ class JointParticleFilter:
 
     sum_weight = 0
     for particle in self.particles:
-      sum_weights += weight[particles]
+      sum_weights += weight[particle]
+
     if sum_weight == 0:
       self.initializeParticles()
     return
