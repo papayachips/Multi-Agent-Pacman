@@ -262,13 +262,13 @@ class ParticleFilter(InferenceModule):
     for p in self.particles:
       trueDistance = util.manhattanDistance(p, pacmanPosition)
 
-      weights[p] = emissionModel[trueDistance] * 1
+      weights[p] += emissionModel[trueDistance] * 1
 
     sum_weights = 0
     for p in weights:
       sum_weights += weights[p]
     if sum_weights == 0:
-      self.particles = self.initializeUniformly(gameState)
+      self.initializeUniformly(gameState)
       return
 
     weights.normalize()
@@ -462,8 +462,10 @@ class JointParticleFilter:
       weight_list = []
       particle_list = list(particle)
       for i in range(self.numGhosts):
-        trueDistance = util.manhattanDistance(particle, pacmanPosition)
+        trueDistance = util.manhattanDistance(particle[i], pacmanPosition)
         weights_list.append(emissionModel[trueDistance] * 1)
+
+
 
 
 
