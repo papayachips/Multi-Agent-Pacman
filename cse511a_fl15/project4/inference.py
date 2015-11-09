@@ -457,29 +457,32 @@ class JointParticleFilter:
     if len(noisyDistances) < self.numGhosts: return
     emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
-    "*** YOUR CODE HERE ***"
+    newParticles = []
     weights = []
     for i in range(self.numGhosts):
-      weights.append(util.Counter)
+      weights.append(util.Counter())
 
     for particle in self.particles:
       particle_list = list(particle)
 
+      trueDistances = []
       for i in range(self.numGhosts):
-        trueDistance = util.manhattanDistance(particle[i], pacmanPosition)
-        weights[i][particle] = emissionModels[trueDistance] * 1
+        trueDistances.append(int(util.manhattanDistance(particle[i], pacmanPosition)))
 
-      for weight in weights:
-        weight.normalize()
-        
+      for i in range(self.numGhosts):
+        weights[i][particle] += emissionModels[i][trueDistances[i]]
 
+    for weight in weights:
+      weight.normalize()
 
-    weights.normalize()
+    for i in range(self.numParticles):
+      newParticle = []
+      for i in range(self.numGhosts):
+        newParticle.append(util.sample(weights[i]))
+      newParticles.append(tuple(newParticle))
 
-    "***resample***"
-
-    self.particles = [util.sample(weights) for i in range(self.numParticles)]
-
+    self.particles = newParticles
+    
   
   def getBeliefDistribution(self):
     dist = util.Counter()
