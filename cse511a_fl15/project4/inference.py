@@ -467,9 +467,7 @@ class JointParticleFilter:
       return
 
     newParticles = []
-    weights = []
-    for i in range(self.numGhosts):
-      weights.append(util.Counter())
+    weights = util.Counter()
 
     for particle in self.particles:
 
@@ -478,24 +476,21 @@ class JointParticleFilter:
         trueDistances.append(int(util.manhattanDistance(particle[i], pacmanPosition)))
 
       for i in range(self.numGhosts):
-        weights[i][particle] *= emissionModels[i][trueDistances[i]]
+        weights[particle] *= emissionModels[i][trueDistances[i]]
 
     sum_weight = 0
-    for weight in weights:
-      for particle in self.particles:
-        sum_weights += weight[particles]
-      if sum_weight == 0:
-        self.initializeParticles()
-      return
+    for particle in self.particles:
+      sum_weights += weight[particles]
+    if sum_weight == 0:
+      self.initializeParticles()
+    return
 
-    for weight in weights:
-      weight.normalize()
+    weights.normalize()
+
+    newParticles = []
 
     for i in range(self.numParticles):
-      newParticle = []
-      for i in range(self.numGhosts):
-        newParticle.append(util.sample(weights[i]))
-      newParticles.append(tuple(newParticle))
+      newParticles.append(util.sample(weights))
 
     self.particles = newParticles
     
