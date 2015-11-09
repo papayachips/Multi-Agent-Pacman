@@ -353,7 +353,15 @@ class JointParticleFilter:
   def initializeParticles(self):
     "Initializes particles randomly.  Each particle is a tuple of ghost positions. Use self.numParticles for the number of particles"
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    self.particles = []
+    for i in range(self.numParticles):
+      ghostsPos = [random.choice(self.legalPositions) for j in range(self.numGhosts)]
+      self.particles.append(tuple(ghostsPos))
+
+    self.beliefs = util.Counter()
+    for particle in self.particles:
+      self.beliefs[particle] = 1.0
+    self.beliefs.normalize()
 
   def addGhostAgent(self, agent):
     "Each ghost agent is registered separately and stored (in case they are different)."
@@ -399,12 +407,40 @@ class JointParticleFilter:
           The ghost agent you are meant to supply is self.ghostAgents[ghostIndex-1],
           but in this project all ghost agents are always the same.
     """
+    '''
+    allPossible = util.Counter()
+    
+    for oldPos in self.particles:
+      newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
+      for newPos, prob in newPosDist.items():
+        allPossible[newPos] += newPosDist[newPos] * self.beliefs[oldPos]
+    self.beliefs = allPossible
+    '''
     newParticles = []
+    allPossible = util.Counter()
+
     for oldParticle in self.particles:
       newParticle = list(oldParticle) # A list of ghost positions
       "*** YOUR CODE HERE ***"
+
+      each_ghost = 1
+      for i in range(self.numGhosts):
+
+        newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, newParticle),
+                                                   i, self.ghostAgents[i])
+        each_ghost_pos = 0
+        for newPos, prob in newPosDist.items():
+
+          each_ghost_pos += newPosDist[newPos] * self.beliefs[tuple(newParticle)]
+          
+        each_ghost *= each_ghost_pos 
+
+
       newParticles.append(tuple(newParticle))
+      allPossible[tuple(newParticle)] = each_ghost 
+
     self.particles = newParticles
+    self.beliefs = allPossible
 
   def getJailPosition(self, i):
     return (2 * i + 1, 1);
