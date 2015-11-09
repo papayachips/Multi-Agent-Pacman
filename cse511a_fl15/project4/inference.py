@@ -466,16 +466,17 @@ class JointParticleFilter:
     return
 
     weights = util.Counter()
+    for particle in self.particls:
+      weights[particle] = 1
 
 
     for particle in self.particles:
 
       trueDistances = []
-      for i in range(self.numGhosts):
-        trueDistances.append(int(util.manhattanDistance(particle[i], pacmanPosition)))
-      weights[particle] = 1
-      for i in range(self.numGhosts):
-        weights[particle] *= emissionModels[i][trueDistances[i]]
+      for ghost in range(self.numGhosts):
+        trueDistances.append(int(util.manhattanDistance(particle[ghost], pacmanPosition)))
+      for ghots in range(self.numGhosts):
+        weights[particle] *= emissionModels[ghost][trueDistances[ghost]]
 
     sum_weight = 0
     for particle in self.particles:
