@@ -446,6 +446,18 @@ class JointParticleFilter:
     emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
     "*** YOUR CODE HERE ***"
+    weights = util.Counter()
+    for p in self.particles:
+      trueDistance = util.manhattanDistance(p, pacmanPosition)
+
+      weights[p] = emissionModel[trueDistance] * 1
+
+    weights.normalize()
+
+    "***resample***"
+
+    self.particles = [util.sample(weights) for i in range(self.numParticles)]
+
   
   def getBeliefDistribution(self):
     dist = util.Counter()
