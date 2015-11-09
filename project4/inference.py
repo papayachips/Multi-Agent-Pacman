@@ -482,8 +482,8 @@ class JointParticleFilter:
 
     sum_weight = 0
     for weight in weights:
-      for p in weight:
-        sum_weights += weight[p]
+      for particle in self.particles:
+        sum_weights += weight[particles]
       if sum_weight == 0:
         self.initializeParticles()
       return
