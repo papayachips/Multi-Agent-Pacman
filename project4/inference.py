@@ -466,9 +466,6 @@ class JointParticleFilter:
     return
 
     weights = util.Counter()
-    for particle in self.particls:
-      weights[particle] = 1
-
 
     for particle in self.particles:
 
@@ -478,7 +475,7 @@ class JointParticleFilter:
       weight_temp = 1
       for ghots in range(self.numGhosts): 
         weight_temp *= emissionModels[ghost][trueDistances[ghost]]
-      weights[particle] *= weight_temp
+      weights[particle] += weight_temp
 
     sum_weight = 0
     for particle in self.particles:
