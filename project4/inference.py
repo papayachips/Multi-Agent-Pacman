@@ -473,8 +473,9 @@ class JointParticleFilter:
       for ghost in range(self.numGhosts):
         trueDistances.append(int(util.manhattanDistance(particle[ghost], pacmanPosition)))
       weight_temp = 1
-      for ghots in range(self.numGhosts): 
-        weight_temp *= emissionModels[ghost][trueDistances[ghost]]
+      for ghost in range(self.numGhosts):
+        if noisyDistance[ghost] is not None:
+          weight_temp *= emissionModels[ghost][trueDistances[ghost]]
       weights[particle] += weight_temp
 
     sum_weight = 0
