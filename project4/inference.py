@@ -258,6 +258,14 @@ class ParticleFilter(InferenceModule):
       self.particles = [self.getJailPosition() for i in range(self.numParticles)]
       return
 
+    sum_weights = 0
+    for p in self.particles:
+      sum_weights += self.particles[p]
+
+    if sum_weights = 0:
+      self.particles = self.initializeUniformly(gameState)
+      return
+
     weights = util.Counter()
     for p in self.particles:
       trueDistance = util.manhattanDistance(p, pacmanPosition)
@@ -451,10 +459,12 @@ class JointParticleFilter:
 
     "*** YOUR CODE HERE ***"
     weights = util.Counter()
-    for p in self.particles:
-      trueDistance = util.manhattanDistance(p, pacmanPosition)
+    for particle in self.particles:
+      particle_list = list(particle)
+      for i in range(self.numGhosts):
+        trueDistance = util.manhattanDistance(p, pacmanPosition)
 
-      weights[p] = emissionModel[trueDistance] * 1
+        weights[p] = emissionModel[trueDistance] * 1
 
     weights.normalize()
 
