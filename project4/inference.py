@@ -402,20 +402,15 @@ class JointParticleFilter:
           The ghost agent you are meant to supply is self.ghostAgents[ghostIndex-1],
           but in this project all ghost agents are always the same.
     """
-    '''
-    allPossible = util.Counter()
     
-    for oldPos in self.particles:
-      newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
-      for newPos, prob in newPosDist.items():
-        allPossible[newPos] += newPosDist[newPos] * self.beliefs[oldPos]
-    self.beliefs = allPossible
-    '''
     newParticles = []
-    for particle in self.particles
-    for i in range(self.numParticles):
-      newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, ))
+    for particle in self.particles:
+      for i in range(self.numParticles):
+        newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, particle), i, self.ghostAgents[i])
+        particle[i] = util.sample(newPosDist)
+      newParticles.append(particle)
     
+    self.particles = newParticles
 
   def getJailPosition(self, i):
     return (2 * i + 1, 1);
