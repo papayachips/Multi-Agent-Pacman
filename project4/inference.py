@@ -254,8 +254,9 @@ class ParticleFilter(InferenceModule):
     emissionModel = busters.getObservationDistribution(noisyDistance)
     pacmanPosition = gameState.getPacmanPosition()
     "*** YOUR CODE HERE ***"
-
-    
+    if noisyDistance == None:
+      self.particles = [self.getJailPosition() for i in range(self.numParticles)]
+      return
 
     weights = util.Counter()
     for p in self.particles:
