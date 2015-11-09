@@ -308,7 +308,10 @@ class ParticleFilter(InferenceModule):
     ghost locations conditioned on all evidence and time passage.
     """
     "*** YOUR CODE HERE ***"
-    return self.particles
+    belief = util.Counter()
+    for particle in self.particles:
+      belief[particle] = 1
+    return belief
 
 class MarginalInference(InferenceModule):
   "A wrapper around the JointInference module that returns marginal beliefs about ghosts."
