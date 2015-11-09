@@ -227,15 +227,7 @@ class ParticleFilter(InferenceModule):
   def initializeUniformly(self, gameState):
     "Initializes a list of particles. Use self.numParticles for the number of particles"
     "*** YOUR CODE HERE ***"
-
     self.particles = [random.choice(self.legalPositions) for i in range(self.numParticles)]
-
-    self.beliefs = util.Counter()
-    for p in self.particles:
-      self.beliefs[p] = 1.0
-    self.beliefs.normalize()
-
-
   
   def observe(self, observation, gameState):
     """
@@ -263,22 +255,22 @@ class ParticleFilter(InferenceModule):
     pacmanPosition = gameState.getPacmanPosition()
     "*** YOUR CODE HERE ***"
 
-    if noisyDistance == None:
-      self.beliefs[self.getJailPosition()] = 1
+    
 
-    allPossible = util.Counter()
+    weights = util.Counter()
     for p in self.particles:
       trueDistance = util.manhattanDistance(p, pacmanPosition)
 
-      if emissionModel[trueDistance] > 0:
-        allPossible[p] = emissionModel[trueDistance] * self.beliefs[p]
-      if emissionModel[trueDistance] == 0:
-        allPossible[p] = 0
+      weights[p] = emissionModel[trueDistance] * 1
 
-    allPossible.normalize()
-        
+    weights.normalize()
+
+    "***resample***"
+
+    self.particles = [util.sample(weights) for i in range(self.numParticles)]
+    
     "*** YOUR CODE HERE ***"
-    self.beliefs = allPossible
+
 
 
   def elapseTime(self, gameState):
@@ -294,14 +286,22 @@ class ParticleFilter(InferenceModule):
     position.
     """
     "*** YOUR CODE HERE ***"
-    allPossible = util.Counter()
     
-    for oldPos in self.particles:
-      newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, oldPos))
-      for newPos, prob in newPosDist.items():
-        allPossible[newPos] += newPosDist[newPos] * self.beliefs[oldPos]
-    self.beliefs = allPossible
+    newParticles = []
+    for particle in self.particles:
+      newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, particle))
+      newParticles.append(util.sample(newPosDist)))
 
+    self.particles = newParticles  
+  '''
+  vector<point> newParticles;
+  for (int i = 0 ; i < self.numParticles ; ++i) {
+    point particle = particles[i];
+    map<point, float> newPosDist = self.getPositionDistribution(self.setGhostPosition(gameState, particle));
+    //vector<point> newParticles;
+    newParticles.push_back(util.sample(newPosDist));
+  }
+  '''
   def getBeliefDistribution(self):
     """
     Return the agent's current belief state, a distribution over
@@ -432,7 +432,7 @@ class JointParticleFilter:
         for newPos, prob in newPosDist.items():
 
           each_ghost_pos += newPosDist[newPos] * self.beliefs[tuple(newParticle)]
-          
+
         each_ghost *= each_ghost_pos 
 
 
