@@ -270,7 +270,7 @@ class ParticleFilter(InferenceModule):
     if sum_weights == 0:
       self.particles = self.initializeUniformly(gameState)
       return
-      
+
     weights.normalize()
 
     "***resample***"
@@ -318,7 +318,7 @@ class ParticleFilter(InferenceModule):
     "*** YOUR CODE HERE ***"
     belief = util.Counter()
     for particle in self.particles:
-      belief[particle] = 1
+      belief[particle] += 1
     return belief
 
 class MarginalInference(InferenceModule):
@@ -464,6 +464,7 @@ class JointParticleFilter:
       for i in range(self.numGhosts):
         trueDistance = util.manhattanDistance(particle, pacmanPosition)
         weights_list.append(emissionModel[trueDistance] * 1)
+
 
 
     weights.normalize()
