@@ -462,9 +462,10 @@ class JointParticleFilter:
         index = noisyDistances.index(noisyDistance)
         for particle in self.particles:
           newParticle = list(particle)
-          newParticle[index] = self.getJailPosition()
+          newParticle[index] = self.getJailPosition(index)
           self.particles[self.particles.index(particle)] = tuple(newParticle)
-      return 
+      return
+
           
 
     newParticles = []
