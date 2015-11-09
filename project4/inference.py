@@ -319,6 +319,7 @@ class ParticleFilter(InferenceModule):
     belief = util.Counter()
     for particle in self.particles:
       belief[particle] += 1
+    belief.normalize()
     return belief
 
 class MarginalInference(InferenceModule):
@@ -457,16 +458,20 @@ class JointParticleFilter:
     emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
     "*** YOUR CODE HERE ***"
-    weights = util.Counter()
+    weights = []
+    for i in range(self.numGhosts):
+      weights.append(util.Counter)
+
     for particle in self.particles:
-      weight_list = []
       particle_list = list(particle)
+
       for i in range(self.numGhosts):
         trueDistance = util.manhattanDistance(particle[i], pacmanPosition)
-        weights_list.append(emissionModel[trueDistance] * 1)
+        weights[i][particle] = emissionModels[trueDistance] * 1
 
-
-
+      for weight in weights:
+        weight.normalize()
+        
 
 
     weights.normalize()
