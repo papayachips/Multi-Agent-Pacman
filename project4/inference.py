@@ -457,14 +457,13 @@ class JointParticleFilter:
     if len(noisyDistances) < self.numGhosts: return
     emissionModels = [busters.getObservationDistribution(dist) for dist in noisyDistances]
 
-    for noisyDistance in noisyDistances:
-      if noisyDistance == None:
-        index = noisyDistances.index(noisyDistance)
-        for particle in self.particles:
+    for i in range(len(noisyDistances)):
+      if noisyDistances[i] == None:
+        for j in range(len(self.particles)):
           newParticle = list(particle)
-          newParticle[index] = self.getJailPosition(index)
-          self.particles[self.particles.index(particle)] = tuple(newParticle)
-      return
+          newParticle[i] = self.getJailPosition(i)
+          self.particles[j] = tuple(newParticle)
+    return
 
     newParticles = []
     weights = util.Counter()
