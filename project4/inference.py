@@ -460,7 +460,7 @@ class JointParticleFilter:
     for i in range(len(noisyDistances)):
       if noisyDistances[i] == None:
         for j in range(len(self.particles)):
-          newParticle = list(particle)
+          newParticle = list(self.particles[j])
           newParticle[i] = self.getJailPosition(i)
           self.particles[j] = tuple(newParticle)
     return
@@ -468,12 +468,13 @@ class JointParticleFilter:
     newParticles = []
     weights = util.Counter()
 
+
     for particle in self.particles:
 
       trueDistances = []
       for i in range(self.numGhosts):
         trueDistances.append(int(util.manhattanDistance(particle[i], pacmanPosition)))
-
+      weights[particle] = 1
       for i in range(self.numGhosts):
         weights[particle] *= emissionModels[i][trueDistances[i]]
 
