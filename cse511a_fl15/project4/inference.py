@@ -466,8 +466,6 @@ class JointParticleFilter:
           self.particles[self.particles.index(particle)] = tuple(newParticle)
       return
 
-          
-
     newParticles = []
     weights = []
     for i in range(self.numGhosts):
@@ -481,6 +479,14 @@ class JointParticleFilter:
 
       for i in range(self.numGhosts):
         weights[i][particle] += emissionModels[i][trueDistances[i]]
+
+    sum_weight = 0
+    for weight in weights:
+      for p in weight:
+        sum_weights += weight[p]
+      if sum_weight == 0:
+        self.initializeParticles()
+      return
 
     for weight in weights:
       weight.normalize()
