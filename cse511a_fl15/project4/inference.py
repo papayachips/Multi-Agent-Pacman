@@ -463,7 +463,6 @@ class JointParticleFilter:
           newParticle = list(self.particles[j])
           newParticle[i] = self.getJailPosition(i)
           self.particles[j] = tuple(newParticle)
-    return
 
     weights = util.Counter()
 
@@ -474,17 +473,16 @@ class JointParticleFilter:
         trueDistances.append(int(util.manhattanDistance(particle[ghost], pacmanPosition)))
       weight_temp = 1
       for ghost in range(self.numGhosts):
-        if noisyDistance[ghost] is not None:
+        if noisyDistances[ghost] is not None:
           weight_temp *= emissionModels[ghost][trueDistances[ghost]]
       weights[particle] += weight_temp
 
     sum_weight = 0
     for particle in self.particles:
-      sum_weights += weight[particle]
+      sum_weight += weights[particle]
 
     if sum_weight == 0:
       self.initializeParticles()
-    return
 
     weights.normalize()
 
