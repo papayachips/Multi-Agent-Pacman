@@ -405,9 +405,11 @@ class JointParticleFilter:
     
     newParticles = []
     for particle in self.particles:
-      for i in range(self.numParticles):
+      for i in range(self.numGhosts):
         newPosDist = getPositionDistributionForGhost(setGhostPositions(gameState, particle), i, self.ghostAgents[i])
-        particle[i] = util.sample(newPosDist)
+        particle_list = list(particle)
+        particle_list[i] = util.sample(newPosDist)
+        particle = tuple(particle_list)
       newParticles.append(particle)
     
     self.particles = newParticles
